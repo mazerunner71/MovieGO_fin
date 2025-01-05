@@ -1,0 +1,22 @@
+﻿@model Microsoft.AspNetCore.Identity.IdentityUser
+
+@{
+    ViewData["Title"] = "Edycja użytkownika";
+}
+
+<h1>Edycja użytkownika</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label>Email</label>
+        <input type="email" class="form-control" value="@Model.Email" readonly />
+    </div>
+    <div class="form-group">
+        <label>Rola</label>
+        <select class="form-control" name="role" asp-items="ViewBag.AllRoles">
+            <option value="">Brak roli</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Zapisz</button>
+    <a asp-action="Users">Powrót do listy</a>
+</form>

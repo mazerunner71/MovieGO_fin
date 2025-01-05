@@ -1,0 +1,44 @@
+﻿@model IEnumerable<MovieGO.Models.Movie>
+
+@{
+    ViewData["Title"] = "Filmy";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Lista filmów</h1>
+    @if (User.IsInRole("Administrator"))
+    {
+        <a href="@Url.Action("Create", "Movies")" class="btn btn-primary">Dodaj film</a>
+    }
+</div>
+
+<div class="album py-5">
+    <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
+            @foreach (var movie in Model)
+            {
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <img src="@Url.Content(movie.ImagePath)" class="card-img-top" alt="Movie image" style="object-fit: cover;" />
+                        <div class="card-body">
+                            <h5 class="card-title">@movie.Title</h5>
+                            <p class="card-text"><strong>Gatunek:</strong> @movie.Category?.Name<br />
+                            <strong>Czas trwania:</strong> @movie.Duration min</p>
+                            <p class="card-text">@movie.Description.Substring(0, Math.Min(100, movie.Description.Length))...</p>
+                            <div class="d-flex flex-wrap gap-2">
+                                <a href="@Url.Action("Details", new { id = movie.Id })" class="btn btn-info btn-sm">Szczegóły</a>
+                                <a href="@Url.Action("Index", "Screenings", new { movieTitle = movie.Title })" class="btn btn-success btn-sm">Sprawdź seanse</a>
+                                @if (User.IsInRole("Administrator"))
+                                {
+                                    <a href="@Url.Action("Edit", new { id = movie.Id })" class="btn btn-warning btn-sm">Edytuj</a>
+                                    <a href="@Url.Action("Delete", new { id = movie.Id })" class="btn btn-danger btn-sm">Usuń</a>
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

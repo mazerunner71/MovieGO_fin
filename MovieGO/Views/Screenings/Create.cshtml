@@ -1,0 +1,40 @@
+﻿@model MovieGO.Models.Screening
+
+@{
+    ViewData["Title"] = "Dodaj seans";
+}
+
+<h1>Dodaj seans</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ScreeningDate" class="control-label"></label>
+                <input asp-for="ScreeningDate" class="form-control" />
+                <span asp-validation-for="ScreeningDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HallId" class="control-label"></label>
+                <select asp-for="HallId" class ="form-control" asp-items="ViewBag.HallId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="MovieId" class="control-label"></label>
+                <select asp-for="MovieId" class ="form-control" asp-items="ViewBag.MovieId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Dodaj seans" class="mt-3 btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Powrót do listy</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

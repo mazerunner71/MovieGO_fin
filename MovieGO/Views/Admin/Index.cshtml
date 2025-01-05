@@ -1,0 +1,82 @@
+﻿@{
+    ViewData["Title"] = "Panel administracyjny";
+}
+
+<h1>Panel administracyjny</h1>
+
+<h4 class="mt-5">Statystyki</h4>
+
+<div class="row mb-4">
+    <div class="col">
+        <form class="form-inline d-flex align-items-end" method="get">
+            <div class="form-group mr-3">
+                <label for="CinemaId" class="mr-2">Filtruj po kinie:</label>
+                <select class="form-control" id="CinemaId" name="cinemaId" asp-items="ViewBag.Cinemas">
+                    <option value="">Wszystkie</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary ms-3">Filtruj</button>
+            <a href="@Url.Action("Index", "Admin")" class="btn btn-secondary ms-3">Wyczyść filtry</a>
+        </form>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <!-- Statystyki -->
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Rezerwacje</h5>
+                <p class="card-text">@ViewData["TotalReservedSeats"] / @ViewData["TotalSeats"]</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Najpopularniejszy film</h5>
+                <p class="card-text">
+                    @ViewData["MostPopularMovie"]
+                    (@ViewData["MostPopularMovieReservations"] rezerwacji)
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Najpopularniejsze kino</h5>
+                <p class="card-text">@ViewData["MostPopularCinema"]</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4>Użytkownicy i role</h4>
+<hr />
+<div class="row mb-4">
+    <!-- Użytkownicy -->
+    <div class="col-md-4">
+        <a href="@Url.Action("Users", "Admin")" class="text-decoration-none">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="bi bi-people-fill" style="font-size: 2rem;"></i>
+                    <h5 class="card-title mt-2">Zarządzanie użytkownikami</h5>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Role -->
+    <div class="col-md-4">
+        <a href="@Url.Action("Roles", "Admin")" class="text-decoration-none">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="bi bi-key-fill" style="font-size: 2rem;"></i>
+                    <h5 class="card-title mt-2">Zarządzanie rolami</h5>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+

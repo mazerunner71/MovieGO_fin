@@ -1,0 +1,108 @@
+﻿@model MovieGO.Models.Reservation
+
+@{
+    ViewData["Title"] = "Edytuj rezerwację";
+}
+
+<h1 class="text-center">Edycja rezerwacji</h1>
+
+@if (Model.Screening != null)
+{
+    <div class="badges text-center mb-4">
+        <span class="badge bg-primary">Data: @Model.Screening.ScreeningDate.ToString("HH:mm dd.MM")</span>
+        <span class="badge bg-secondary">Film: @Model.Screening.Movie?.Title</span>
+        <span class="badge bg-success">Kino: @Model.Screening.Hall?.Cinema?.Name</span>
+        <span class="badge bg-info">Sala: @Model.Screening.Hall?.Name</span>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="screen mb-5">EKRAN</div>
+    </div>
+
+    <form asp-action="Edit" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="seating-area mt-5" style="grid-template-columns: repeat(@Model.Screening.Hall.ColumnCount, 30px);">
+            @for (int row = 1; row <= Model.Screening.Hall.RowCount; row++)
+            {
+                @for (int col = 1; col <= Model.Screening.Hall.ColumnCount; col++)
+                {
+                    var isReserved = Model.Screening.Reservations
+                    .Any(r => r.Row == row && r.Column == col && (r.Row != Model.Row || r.Column != Model.Column));
+
+                    var isSelected = Model.Row == row && Model.Column == col;
+
+                    @if (isReserved)
+                    {
+                        <button type="button" disabled class="seat reserved">X</button>
+                    }
+                    else if (isSelected)
+                    {
+                        <button type="button" class="seat selected" data-row="@row" data-column="@col">@row/@col</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="seat available" data-row="@row" data-column="@col">@row/@col</button>
+                    }
+                }
+            }
+        </div>
+
+        <input type="hidden" asp-for="Row" id="Row" />
+        <input type="hidden" asp-for="Column" id="Column" />
+        <input type="hidden" asp-for="ScreeningId" value="@Model.Screening.Id" />
+
+        <div class="text-center mt-3">
+            <input type="submit" value="Zatwierdź zmiany" class="btn btn-primary" disabled id="confirmButton" />
+        </div>
+    </form>
+}
+else
+{
+    <div class="alert alert-danger text-center" role="alert">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+@section Scripts {
+    <script>
+        let selectedButton = null;
+
+        document.querySelectorAll('.seat').forEach(button => {
+            if (button.dataset.row == @Model.Row && button.dataset.column == @Model.Column) {
+                selectedButton = button;
+                button.classList.add('selected');
+                document.getElementById('Row').value = @Model.Row;
+                document.getElementById('Column').value = @Model.Column;
+                document.getElementById('confirmButton').disabled = false;
+            }
+        });
+
+        document.querySelectorAll('.seat.available, .seat.selected').forEach(button => {
+            button.addEventListener('click', () => {
+                const rowInput = document.getElementById('Row');
+                const columnInput = document.getElementById('Column');
+                const confirmButton = document.getElementById('confirmButton');
+
+                if (selectedButton === button) {
+                    selectedButton.classList.remove('selected');
+                    selectedButton = null;
+                    rowInput.value = '';
+                    columnInput.value = '';
+                    confirmButton.disabled = true;
+                } else {
+                    if (selectedButton) {
+                        selectedButton.classList.remove('selected');
+                    }
+
+                    button.classList.add('selected');
+                    selectedButton = button;
+
+                    rowInput.value = button.dataset.row;
+                    columnInput.value = button.dataset.column;
+                    confirmButton.disabled = false;
+                }
+            });
+        });
+    </script>
+}

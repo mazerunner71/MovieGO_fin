@@ -1,0 +1,32 @@
+﻿@model MovieGO.Models.Movie
+
+@{
+    ViewData["Title"] = "Szczegóły filmu";
+}
+
+<h1 class="mb-4 text-center">@Model.Title</h1>
+
+<div class="card mb-4">
+    <div class="row g-0">
+        <div class="col-md-4">
+            <img src="@Model.ImagePath" class="img-fluid rounded-start" alt="Plakat filmu" />
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title">Szczegóły filmu:</h5>
+                <p class="card-text">
+                    <strong>Kategoria:</strong> @Model.Category.Name<br />
+                    <strong>Opis:</strong> @Model.Description<br />
+                    <strong>Czas trwania:</strong> @Model.Duration minut
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="d-flex">
+            @if (User.IsInRole("Administrator"))
+            {
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edytuj</a>
+            }
+    <a asp-action="Index" class="ms-3 btn btn-secondary">Powrót do listy</a>
+</div>

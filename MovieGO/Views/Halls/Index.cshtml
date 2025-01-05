@@ -1,0 +1,59 @@
+﻿@model IEnumerable<MovieGO.Models.Hall>
+
+@{
+    ViewData["Title"] = "Sale";
+}
+
+<div class="d-flex justify-content-between align-items-center my-4">
+    <h1>List sal</h1>
+    @if (User.IsInRole("Administrator"))
+    {
+
+        <a asp-action="Create" class="btn btn-primary">
+            Dodaj sale kinową
+        </a>
+
+    }
+</div>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Cinema.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RowCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ColumnCount)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cinema.Name)
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RowCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ColumnCount)
+            </td>
+            <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edytuj</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Usuń</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

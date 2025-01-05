@@ -1,0 +1,104 @@
+﻿@model IEnumerable<MovieGO.Models.Screening>
+
+@{
+    ViewData["Title"] = "Seanse";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">Seanse</h1>
+    @if (User.IsInRole("Administrator"))
+    {
+    <a asp-action="Create" class="btn btn-primary">Dodaj seans</a>
+    }
+</div>
+
+<form method="get" action="@Url.Action("Index")" class="d-flex justify-content-start mb-4">
+    <div class="me-3">
+        <label for="cityFilter" class="form-label">Filtruj po miastach:</label>
+        <select id="cityFilter" name="city" class="form-select">
+            <option value="">Wybierz miasto</option>
+            @foreach (var city in (List<string>)ViewData["Cities"])
+            {
+                if (city == (ViewData["City"]?.ToString() ?? ""))
+                {
+                    <option value="@city" selected="selected">@city</option>
+                }
+                else
+                {
+                    <option value="@city">@city</option>
+                }
+            }
+        </select>
+    </div>
+
+    <div class="me-3">
+        <label for="movieFilter" class="form-label">Filtruj po tytułach filmów:</label>
+        <select id="movieFilter" name="movieTitle" class="form-select">
+            <option value="">Wybierz tytuł</option>
+            @foreach (var title in (List<string>)ViewData["Movies"])
+            {
+                if (title == (ViewData["MovieTitle"]?.ToString() ?? ""))
+                {
+                    <option value="@title" selected="selected">@title</option>
+                }
+                else
+                {
+                    <option value="@title">@title</option>
+                }
+            }
+        </select>
+    </div>
+    <div class="me-3">
+        <label for="dateFilter" class="form-label">Filtruj po dacie:</label>
+        <input type="date" id="dateFilter" name="screeningDate" class="form-control" value="@ViewData["ScreeningDate"]" />
+    </div>
+    <button type="submit" class="btn btn-primary align-self-end">Filtruj</button>
+    <a asp-action="Index" class="ms-3 btn btn-secondary align-self-end">Wyczyść filtry</a>
+</form>
+
+<div class="container">
+    <div class="row gy-4">
+        @foreach (var item in Model)
+        {
+            <div class="col-12">
+                <div class="card shadow-md">
+                    <div class="row g-0">
+                        <div class="col-md-3">
+                            @if (!string.IsNullOrEmpty(item.Movie.ImagePath))
+                            {
+                                <img src="@Url.Content(item.Movie.ImagePath)" alt="Plakat filmu @Html.DisplayFor(modelItem => item.Movie.Title)" class="img-fluid rounded-start">
+                            }
+                        </div>
+                        <div class="col-md-7">
+                            <div class="card-body">
+                                <h2>@Html.DisplayFor(modelItem => item.Movie.Title)</h2>
+                                <p class="card-text">
+                                    <strong>Gatunek:</strong> @Html.DisplayFor(modelItem => item.Movie.Category.Name)<br />
+                                    <strong>Czas trwania:</strong> @Html.DisplayFor(modelItem => item.Movie.Duration) min<br />
+                                    <strong>Kino:</strong> @Html.DisplayFor(modelItem => item.Hall.Cinema.Name)<br />
+                                    <strong>Sala:</strong> @Html.DisplayFor(modelItem => item.Hall.Name)<br />
+                                    <strong>Data seansu:</strong> @Html.DisplayFor(modelItem => item.ScreeningDate)<br />
+                                </p>
+                                <div>
+                                    @if (item.ScreeningDate > DateTime.Now)
+                                    {
+                                        <a asp-controller="Reservations" asp-action="Create" asp-route-screeningId="@item.Id" class="btn btn-primary mb-2">Zarezerwuj!</a>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-secondary mb-2" disabled>Seans w trakcie lub już się odbył.</button>
+                                    }                                    
+                                    @if (User.IsInRole("Administrator"))
+                                    {
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning mb-2">Edytuj</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger mb-2">Usuń</a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,62 @@
+﻿@model IEnumerable<MovieGO.Models.Cinema>
+
+@{
+
+    ViewData["Title"] = "Lista kin";
+
+}
+
+<div class="d-flex justify-content-between align-items-center my-4">
+    <h1>Lista kin</h1>
+    @if (User.IsInRole("Administrator"))
+
+    {
+
+        <a asp-action="Create" class="btn btn-primary">
+            Dodaj kino
+        </a>
+
+    }
+</div>
+
+<div class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div class="card h-100">
+                    @if (!string.IsNullOrEmpty(item.ImagePath))
+                    {
+                        <img src="@Url.Content($"~{item.ImagePath}")" alt="Plakat filmu @Html.DisplayFor(modelItem => item.Name)" class="card-img-top" style="object-fit: cover; height: 200px;" />
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </h5>
+                        <p class="card-text">
+                            @Html.DisplayFor(modelItem => item.StreetAddress),
+                            @Html.DisplayFor(modelItem => item.PostalCode) @Html.DisplayFor(modelItem => item.City)
+                        </p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a asp-action="Index" asp-controller="Screenings" asp-route-city="@item.City" class="btn btn-secondary">
+                            Sprawdź repertuar!
+                        </a>
+                        @if (User.IsInRole("Administrator"))
+
+                        {
+
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">
+                                Edytuj
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">
+                                Usuń
+                            </a>
+
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
