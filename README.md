@@ -64,8 +64,6 @@
 
 ![image](https://github.com/user-attachments/assets/0c23b006-a593-4f77-8870-b4b6091bb3c4)
 
-# MovieGO
-
 ## Konto administratora
 
 Aplikacja automatycznie tworzy konto administratora oraz role użytkowników podczas pierwszego uruchomienia. Dane logowania do konta administratora to:
