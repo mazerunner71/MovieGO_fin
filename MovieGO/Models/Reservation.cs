@@ -11,12 +11,12 @@ namespace MovieGO.Models
         public Screening? Screening { get; set; }
 
         [Required]
-        [Range(1, int.MaxValue, ErrorMessage = "Nieprawidłowy rząd.")]
+        [Range(1, 20, ErrorMessage = "Nieprawidłowy rząd.")]
         [Display(Name = "Rząd")]
         public int Row { get; set; }
 
         [Required]
-        [Range(1, int.MaxValue, ErrorMessage = "Nieprawidłowa kolumna.")]
+        [Range(1, 20, ErrorMessage = "Nieprawidłowa kolumna.")]
         [Display(Name = "Miejsce")]
         public int Column { get; set; }
         public string? UserId { get; set; }
